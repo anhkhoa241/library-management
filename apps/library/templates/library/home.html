@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Trang chủ{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="fw-bold"><i class="fas fa-star me-2 text-warning"></i>Sách mới nhập</h4>
+    <a href="{% url 'book_list' %}" class="btn btn-outline-primary btn-sm">Xem tất cả</a>
+</div>
+<div class="row g-4">
+    {% for sach in sach_moi %}
+    <div class="col-md-3 col-sm-6">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <div class="mb-3 display-6 text-primary">
+                    <i class="fas fa-book"></i>
+                </div>
+                <h6 class="card-title">{{ sach.ten_sach }}</h6>
+                <p class="card-text text-muted small">{{ sach.tac_gia }}</p>
+                <span class="badge bg-info">{{ sach.ma_the_loai.ten_the_loai }}</span>
+                <p class="mt-2 small">Còn: <strong>{{ sach.so_luong }}</strong></p>
+                <a href="{% url 'book_detail' sach.id %}" class="btn btn-primary btn-sm rounded-pill mt-2">Xem chi tiết</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center py-5 text-muted">
+        <i class="fas fa-box-open fa-3x mb-3"></i>
+        <p>Thư viện chưa có sách. Quay lại sau nhé!</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

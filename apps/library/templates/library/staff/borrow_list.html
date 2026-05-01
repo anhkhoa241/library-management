@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Quản lý phiếu mượn{% endblock %}
+{% block content %}
+<h2 class="mb-4"><i class="fas fa-tasks me-2"></i>Danh sách phiếu mượn đang hoạt động</h2>
+
+{% if phieu_list %}
+<div class="table-responsive">
+    <table class="table table-hover align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>#</th>
+                <th>Độc giả</th>
+                <th>Ngày mượn</th>
+                <th>Hạn trả</th>
+                <th>Quá hạn</th>
+                <th>Sách</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pm in phieu_list %}
+            <tr>
+                <td>{{ pm.id }}</td>
+                <td>{{ pm.ma_doc_gia.ho_ten }}</td>
+                <td>{{ pm.ngay_muon|date:"d/m/Y" }}</td>
+                <td>{{ pm.ngay_tra_du_kien|date:"d/m/Y" }}</td>
+                <td>
+                    {% if pm.so_ngay_qua_han > 0 %}
+                    <span class="badge bg-danger">{{ pm.so_ngay_qua_han }} ngày</span>
+                    {% else %}
+                    <span class="badge bg-success">0</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% for ct in pm.chitietmuon_set.all %}
+                    <div>{{ ct.ma_sach.ten_sach }} ({{ ct.so_luong }})</div>
+                    {% endfor %}
+                </td>
+                <td>
+                    <a href="{% url 'staff_return_book' pm.id %}" class="btn btn-sm btn-outline-warning rounded-pill">
+                        <i class="fas fa-undo-alt"></i> Trả
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="text-center py-5 text-muted">
+    <i class="fas fa-clipboard-check fa-3x mb-3"></i>
+    <p>Không có phiếu mượn nào đang hoạt động.</p>
+</div>
+{% endif %}
+{% endblock %}

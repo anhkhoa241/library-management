@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}Lịch sử mượn{% endblock %}
+{% block content %}
+<h4 class="fw-bold mb-4"><i class="fas fa-history me-2"></i>Lịch sử mượn sách</h4>
+{% if phieu_muon %}
+<div class="table-responsive">
+    <table class="table table-hover align-middle bg-white">
+        <thead class="table-light">
+            <tr>
+                <th>#</th>
+                <th>Ngày mượn</th>
+                <th>Hạn trả</th>
+                <th>Sách</th>
+                <th>Trạng thái</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pm in phieu_muon %}
+            <tr>
+                <td>{{ pm.id }}</td>
+                <td>{{ pm.ngay_muon|date:"d/m/Y" }}</td>
+                <td>{{ pm.ngay_tra_du_kien|date:"d/m/Y" }}</td>
+                <td>
+                    {% for ct in pm.chitietmuon_set.all %}
+                        <span class="d-block">{{ ct.ma_sach.ten_sach }} <small class="text-muted">({{ ct.so_luong }})</small></span>
+                    {% endfor %}
+                </td>
+                <td>
+                    {% if pm.trang_thai == 'Dang muon' %}
+                        <span class="badge bg-primary">Đang mượn</span>
+                    {% elif pm.trang_thai == 'Qua han' %}
+                        <span class="badge bg-danger">Quá hạn</span>
+                    {% else %}
+                        <span class="badge bg-success">Đã trả</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if pm.trang_thai != 'Da tra' %}
+                    <a href="{% url 'return_book' pm.id %}" class="btn btn-sm btn-outline-warning rounded-pill">
+                        <i class="fas fa-undo-alt"></i> Trả
+                    </a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="text-center py-5 text-muted">
+    <i class="fas fa-book-open fa-3x mb-3"></i>
+    <p>Bạn chưa mượn cuốn sách nào.</p>
+</div>
+{% endif %}
+{% endblock %}

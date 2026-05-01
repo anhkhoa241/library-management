@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard – Quản lý{% endblock %}
+{% block content %}
+<h2 class="mb-4"><i class="fas fa-chart-pie me-2"></i>Bảng điều khiển</h2>
+
+<div class="row g-4 mb-5">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white h-100">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-book-reader"></i> Đang mượn</h5>
+                <p class="display-6">{{ dang_muon }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-danger text-white h-100">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-exclamation-triangle"></i> Quá hạn</h5>
+                <p class="display-6">{{ qua_han }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white h-100">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-money-bill-wave"></i> Phí tháng này</h5>
+                <p class="display-6">{{ phi_thang|floatformat:0 }} đ</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header"><i class="fas fa-tags me-2"></i>Top thể loại</div>
+            <div class="card-body">
+                <table class="table table-sm">
+                    <thead><tr><th>Thể loại</th><th>Số tựa</th><th>Tổng bản</th></tr></thead>
+                    <tbody>
+                        {% for tl in theloai_top %}
+                        <tr>
+                            <td>{{ tl.ten_the_loai }}</td>
+                            <td>{{ tl.so_tua }}</td>
+                            <td>{{ tl.tong_ban|default:0 }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="3">Chưa có dữ liệu</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header"><i class="fas fa-boxes me-2"></i>Sách sắp hết (dưới 5 cuốn)</div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    {% for s in sach_sap_het %}
+                    <li class="list-group-item d-flex justify-content-between">
+                        {{ s.ten_sach }}
+                        <span class="badge bg-warning text-dark">{{ s.so_luong }}</span>
+                    </li>
+                    {% empty %}
+                    <li class="list-group-item">Không có sách nào sắp hết.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

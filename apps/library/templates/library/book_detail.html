@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}{{ sach.ten_sach }}{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body p-4">
+                <h2 class="card-title">{{ sach.ten_sach }}</h2>
+                <p class="text-muted"><i class="fas fa-feather-alt me-2"></i>{{ sach.tac_gia }}</p>
+                <hr>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Thể loại:</strong> {{ sach.ma_the_loai.ten_the_loai }}</p>
+                        <p><strong>Năm xuất bản:</strong> {{ sach.nam_xuat_ban|default:"Chưa rõ" }}</p>
+                        <p><strong>Nhà xuất bản:</strong> {{ sach.nha_xuat_ban|default:"Không rõ" }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Loại sách:</strong> <span class="badge bg-info">{{ sach.loai_sach }}</span></p>
+                        <p><strong>Vị trí kệ:</strong> {{ sach.ma_ke.vi_tri|default:"Chưa xếp" }}</p>
+                        <p><strong>Số lượng còn:</strong> <span class="fs-5 text-success">{{ sach.so_luong }}</span></p>
+                    </div>
+                </div>
+                <div class="d-grid gap-2 d-md-block mt-4">
+                    {% if user.is_authenticated %}
+                        {% if sach.so_luong > 0 %}
+                        <a href="{% url 'borrow_book' sach.id %}" class="btn btn-success btn-lg rounded-pill">
+                            <i class="fas fa-hand-holding-heart me-2"></i>Mượn sách
+                        </a>
+                        {% else %}
+                        <button class="btn btn-secondary btn-lg rounded-pill" disabled>Hết sách</button>
+                        {% endif %}
+                    {% else %}
+                        <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-outline-primary btn-lg rounded-pill">
+                            <i class="fas fa-sign-in-alt me-2"></i>Đăng nhập để mượn
+                        </a>
+                    {% endif %}
+                    <a href="javascript:history.back()" class="btn btn-outline-secondary btn-lg rounded-pill ms-2">
+                        <i class="fas fa-arrow-left me-2"></i>Quay lại
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

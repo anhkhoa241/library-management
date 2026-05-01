@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Trả sách – Phiếu #{{ phieu_muon.id }}{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header"><i class="fas fa-undo-alt me-2"></i>Xác nhận trả sách</div>
+            <div class="card-body">
+                <p><strong>Độc giả:</strong> {{ phieu_muon.ma_doc_gia.ho_ten }}</p>
+                <p><strong>Sách mượn:</strong>
+                    {% for ct in phieu_muon.chitietmuon_set.all %}
+                        {{ ct.ma_sach.ten_sach }} ({{ ct.so_luong }})<br>
+                    {% endfor %}
+                </p>
+                <p><strong>Hạn trả:</strong> {{ phieu_muon.ngay_tra_du_kien|date:"d/m/Y" }}</p>
+
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Tình trạng sách</label>
+                        <select name="tinh_trang" class="form-select" required>
+                            <option value="Binh thuong">Bình thường</option>
+                            <option value="Hu hong">Hư hỏng</option>
+                            <option value="Mat">Mất</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Phí hư hỏng (VND)</label>
+                        <input type="number" name="phi_hu_hong" class="form-control" value="0" min="0">
+                    </div>
+                    <div class="d-grid gap-2 d-md-flex">
+                        <button type="submit" class="btn btn-warning rounded-pill"><i class="fas fa-check"></i> Xác nhận trả</button>
+                        <a href="{% url 'staff_borrow_list' %}" class="btn btn-outline-secondary rounded-pill">Hủy</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
